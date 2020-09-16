@@ -1,11 +1,10 @@
 version: "3.7"
 
 services: 
-
   api:
     build: 
-      context: ./api
-    command: npm run start:watch
+      context: ./api  
+    command: npm run start:watch 
     links: 
       - nginx:api.adfoodio.site
       - redis  
@@ -13,13 +12,12 @@ services:
     environment:
       - VIRTUAL_HOST=api.adfoodio.site
       - VIRTUAL_PORT=4848
-    volumes: 
-      - ./api:/api
     logging: 
       driver: "json-file"
       options:
         max-size: "200k"
         max-file: "10"
+        
 
   ######################################################################################################
   ################ Services ############################################################################

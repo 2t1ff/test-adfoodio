@@ -25,11 +25,20 @@
     "strict": true,
     "skipLibCheck": true,
     "preserveSymlinks": true,
-    "resolveJsonModule": true,
     "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
     "strictNullChecks": true,
     "noImplicitAny": true,
     "rootDirs": ["src"],
+    "removeComments": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
     /* Module Resolution Options */
     "moduleResolution": "node", /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "esModuleInterop": true,

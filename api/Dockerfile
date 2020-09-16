@@ -23,7 +23,7 @@ COPY package*.json ./
 RUN npm install
 
 # 5 Add rest of app
-ADD . ./
+ADD . .
 
 # START
 EXPOSE 4848

@@ -7,7 +7,7 @@ import {
 	ObjectType,
 	Resolver,
 	FieldResolver,
-	Root, InputType
+	Root, InputType, Query
 } from "type-graphql";
 import { COOKIE_NAME } from "../constants";
 import { User } from "../entities/User";
@@ -55,6 +55,16 @@ export class UserResolver {
 		}
 		return "";
 	}
+
+	@Query(() => User, { nullable: true })
+    me(@Ctx() { req }: MyContext) {
+        //not logged in
+        if (!req.session?.userId) {
+            return null;
+        }
+
+        return User.findOne(req.session.userId);
+    }
 
 	@Mutation(() => UserResponse)
 	async registerUser(

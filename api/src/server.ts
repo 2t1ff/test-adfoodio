@@ -41,7 +41,7 @@ const main = async () => {
 
 	app.use(
 		cors({
-			origin: "http://localhost:3000",
+			origin: "http://api.adfoodio.site:3000",
 			credentials: true,
 		})
 	);
@@ -54,8 +54,10 @@ const main = async () => {
 			cookie: {
 				maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
 				httpOnly: true,
-				secure: __prod__,
+				secure: false,
 				sameSite: "lax",
+				domain: ".adfoodio.site"
+				
 			},
 			saveUninitialized: false,
 			secret: "between you and me, this should be hidden",

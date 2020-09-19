@@ -15,7 +15,7 @@ export class Serving extends BaseEntity {
 	name!: string;
 
 	@Field(()=> Float)
-	@Column(() => Float32Array)
+	@Column({type: "float"})
 	price!: number;
 
 	@Field()

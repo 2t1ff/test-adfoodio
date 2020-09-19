@@ -32,7 +32,6 @@ const main = async () => {
 		entities: [Serving, User],
 	});
 
-	Serving.delete({});
 	
 	const app = express();
 

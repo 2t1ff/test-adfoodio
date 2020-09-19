@@ -63,10 +63,10 @@ export const HomeNavBar: React.FC<HomeNavBarProps> = ({}) => {
 		>
 			{" "}
 			<Toolbar>
-				<Typography color="textPrimary" variant="h5">
+				<Typography color="textSecondary" variant="h5">
 					Powered by
 				</Typography>
-				<Typography color="textPrimary" variant="h3">
+				<Typography color="textSecondary" variant="h3">
 					AdLudio
 				</Typography>
 				<Box ml="auto" mr={4}>

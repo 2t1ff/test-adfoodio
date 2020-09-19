@@ -18,8 +18,8 @@ const theme = createMuiTheme({
 		},
 		text: {
       primary: "#000",
-      secondary: "#000"
-		},
+      secondary: "#fff"
+		 },
 	},
 	typography: {
     allVariants: {

@@ -1,0 +1,9 @@
+query GetServings {
+	getServings {
+		id
+		name
+		description
+		category
+        price
+	}
+}

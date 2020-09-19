@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
-import { useLoginMutation } from "../generated/graphql";
+import { useRegisterMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,9 +36,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Login = () => {
-	const [values, setValues] = useState({ usernameOrEmail: "", password: "" });
-	const [{ data, fetching, error }, login] = useLoginMutation();
+const Register = () => {
+	const [values, setValues] = useState({
+		username: "",
+		password: "",
+		email: "",
+	});
+	const [{ data, fetching, error }, register] = useRegisterMutation();
 	const classes = useStyles();
 	const router = useRouter();
 
@@ -46,17 +50,23 @@ const Login = () => {
 		console.log(error);
 	}
 
-	const usernameOrEmailError =
-		data && data.login.errors
-			? data.login?.errors[0]?.field === "usernameOrEmail"
-				? data.login.errors[0].message
+	const usernameError =
+		data && data.registerUser.errors
+			? data.registerUser?.errors[0]?.field === "username"
+				? data.registerUser.errors[0].message
+				: undefined
+			: undefined;
+	const emailError =
+		data && data.registerUser.errors
+			? data.registerUser?.errors[0]?.field === "username"
+				? data.registerUser.errors[0].message
 				: undefined
 			: undefined;
 
 	const passwordError =
-		data && data.login.errors
-			? data.login?.errors[0]?.field === "password"
-				? data.login.errors[0].message
+		data && data.registerUser.errors
+			? data.registerUser?.errors[0]?.field === "username"
+				? data.registerUser.errors[0].message
 				: undefined
 			: undefined;
 
@@ -70,7 +80,9 @@ const Login = () => {
 				<Typography component="h1" variant="h5">
 					Sign in
 				</Typography>
-				{data && data.login.user ? data.login.user.email : null}
+				{data && data.registerUser.user
+					? data.registerUser.user.email
+					: null}
 				<form className={classes.form} noValidate>
 					<TextField
 						InputProps={{ className: classes.field }}
@@ -79,20 +91,42 @@ const Login = () => {
 						margin="normal"
 						required
 						fullWidth
-						id="usernameOrEmail"
-						label="Username or Email"
-						name="usernameOrEmail"
+						id="email"
+						label="Email Address"
+						name="email"
 						autoComplete="email"
-						value={values.usernameOrEmail}
-						autoFocus
+						value={values.email}
+                        autoFocus
+                        error={!!emailError}
+                        helperText={emailError}
 						onChange={(event) =>
 							setValues({
 								...values,
-								usernameOrEmail: event.target.value,
+								email: event.target.value,
 							})
 						}
-						error={!!usernameOrEmailError}
-						helperText={usernameOrEmailError}
+					/>
+					<TextField
+						InputProps={{ className: classes.field }}
+						color="secondary"
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="username"
+						label="Username"
+						name="username"
+						autoComplete="username"
+						value={values.username}
+                        autoFocus
+                        error={!!usernameError}
+                        helperText={usernameError}
+						onChange={(event) =>
+							setValues({
+								...values,
+								username: event.target.value,
+							})
+						}
 					/>
 					<TextField
 						InputProps={{ className: classes.field }}
@@ -106,15 +140,15 @@ const Login = () => {
 						label="Password"
 						type="password"
 						id="password"
-						autoComplete="current-password"
+                        autoComplete="current-password"
+                        error={!!passwordError}
+                        helperText={passwordError}
 						onChange={(event) =>
 							setValues({
 								...values,
 								password: event.target.value,
 							})
 						}
-						error={!!passwordError}
-						helperText={passwordError}
 					/>
 					<Button
 						itemScope={true}
@@ -124,8 +158,8 @@ const Login = () => {
 						variant="contained"
 						color="primary"
 						className={classes.submit}
-						onClick={async () => {
-							await login({ ...values });
+						onClick={() => {
+							register({ ...values });
 							if (typeof router.query.next === "string") {
 								router.push(router.query.next);
 							} else {
@@ -133,7 +167,7 @@ const Login = () => {
 							}
 						}}
 					>
-						Sign In
+						Register
 					</Button>
 				</form>
 			</div>
@@ -142,4 +176,4 @@ const Login = () => {
 	);
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default withUrqlClient(createUrqlClient)(Register);

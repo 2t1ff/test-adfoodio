@@ -1063,7 +1063,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
   integrity sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==
 
-"@graphql-codegen/cli@^1.17.8":
+"@graphql-codegen/cli@1.17.8":
   version "1.17.8"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-1.17.8.tgz#06a68894f01796046bb7fa092814948e592e8a75"
   integrity sha512-OIOqzdL9kcgO67fBazwpr3Pb+T2l2erYGsO37qJmCrvyqeNO9we+oYrGgVqswkRnfqaqvVWRJ2OmwzvFrXNy/A==
@@ -1139,7 +1139,7 @@
     tslib "~2.0.0"
     upper-case "2.0.1"
 
-"@graphql-codegen/typescript-operations@^1.17.8":
+"@graphql-codegen/typescript-operations@1.17.8":
   version "1.17.8"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-1.17.8.tgz#17c811c7a719df56fec0878f00b2b7449fb45165"
   integrity sha512-nU1ZldRB4vGcg4FQhOp3GOOyjfIwO+cI110zZhxQw8SV7pbNDJnCckbvkdEOkW+1/jVJcUul8jQVvuym5olipw==
@@ -1161,7 +1161,17 @@
     pascal-case "^3.1.1"
     tslib "~2.0.0"
 
-"@graphql-codegen/typescript@^1.17.8", "@graphql-codegen/typescript@^1.17.9":
+"@graphql-codegen/typescript@1.17.8":
+  version "1.17.8"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.17.8.tgz#08477e532d8342c8a74f75f46f97c85831418e23"
+  integrity sha512-OQCD4CbnKfHG63u1Sh+UsSKdzkoRHI8NmqnV0Z5ECO4Mm3mrm6fGoYZkKmHbA2tgWIFEsQLevDW+CfduyMd9BA==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^1.17.8"
+    "@graphql-codegen/visitor-plugin-common" "^1.17.13"
+    auto-bind "~4.0.0"
+    tslib "~2.0.0"
+
+"@graphql-codegen/typescript@^1.17.8":
   version "1.17.9"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.17.9.tgz#9f96f39c3b59c13f52db8955fff3aa5889bb7827"
   integrity sha512-r6bPSJIeQoMicMEru2pxwAtw5DaY4KCnCd8R2xoQ8aZpkpxqhzd5fmdhh8oXLE4CAZhUCuV0Uad7Ps17Lr5jaw==
@@ -1579,11 +1589,19 @@
   dependencies:
     "@types/node" "*"
 
-"@urql/core@^1.12.3":
+"@urql/core@>=1.13.0", "@urql/core@^1.12.3":
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/@urql/core/-/core-1.13.0.tgz#811154b5951b4282dd698a8c9dff4ff3825ca215"
   integrity sha512-g7Kn2a0TDQotOqvGR7bRC+JqviA4TYtiDZH5M9Roszx7LiqZBkViSr5zmdwlNZjR4kSDn+kSXlCV+Ht0Uqls0Q==
   dependencies:
+    wonka "^4.0.14"
+
+"@urql/exchange-graphcache@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-3.1.0.tgz#fad4c2130d9fa99463fb685df76e13dc2f2a4e25"
+  integrity sha512-riI3Wm9YjBwD5rAc5BXgR/vZaRnnjTA35I4FnPwAZjLKx2a91EF6RxFsWZKao2x47/kLnHGiHEKju1Z8oA87qw==
+  dependencies:
+    "@urql/core" ">=1.13.0"
     wonka "^4.0.14"
 
 "@webassemblyjs/ast@1.9.0":

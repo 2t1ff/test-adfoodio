@@ -101,7 +101,7 @@ export type LoginMutation = (
     { __typename?: 'UserResponse' }
     & { user?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'email'>
+      & Pick<User, 'id' | 'email' | 'username'>
     )>, errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
       & Pick<FieldError, 'message' | 'field'>
@@ -130,6 +130,17 @@ export type RegisterMutation = (
   ) }
 );
 
+export type GetServingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetServingsQuery = (
+  { __typename?: 'Query' }
+  & { getServings: Array<(
+    { __typename?: 'Serving' }
+    & Pick<Serving, 'id' | 'name' | 'description' | 'category' | 'price'>
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -148,6 +159,7 @@ export const LoginDocument = gql`
     user {
       id
       email
+      username
     }
     errors {
       message
@@ -178,6 +190,21 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const GetServingsDocument = gql`
+    query GetServings {
+  getServings {
+    id
+    name
+    description
+    category
+    price
+  }
+}
+    `;
+
+export function useGetServingsQuery(options: Omit<Urql.UseQueryArgs<GetServingsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetServingsQuery>({ query: GetServingsDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

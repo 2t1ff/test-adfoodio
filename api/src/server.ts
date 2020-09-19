@@ -31,6 +31,9 @@ const main = async () => {
 		migrations: [],
 		entities: [Serving, User],
 	});
+
+	Serving.delete({});
+	
 	const app = express();
 
 	app.set("trust proxy", 1);

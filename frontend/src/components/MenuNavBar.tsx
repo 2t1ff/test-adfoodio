@@ -1,0 +1,60 @@
+import {
+	AppBar,
+	Box,
+	Button,
+	IconButton,
+	Toolbar,
+	Typography,
+	Link,
+	CircularProgress, makeStyles
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import React from "react";
+import NextLink from "next/link";
+import { useMeQuery } from "../generated/graphql";
+
+
+const useStyles = makeStyles((theme) => ({
+	logo: {
+		backgroundImage:
+			"url(/logo.png)",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "contain",
+		backgroundPosition: "center",
+	},
+}));
+
+export const MenuNavBar: React.FC<{}> = ({}) => {
+	const classes = useStyles();
+	const [{ data, fetching }, _] = useMeQuery();
+	return (
+		<AppBar
+			style={{ marginTop: 10 }}
+			position="static"
+			elevation={0}
+			color="transparent"
+		>
+			{" "}
+			<Toolbar>
+				
+					<Box
+						alignSelf="flex-start"
+						className={classes.logo}
+						
+						width="12vw"
+						height="6vh"
+					/>
+				<Box ml="auto" mr={4}><NextLink href="/login">
+				<Button variant="text" color="secondary">
+					Offers
+				</Button>
+			</NextLink>
+			<NextLink href="/register">
+				<Button variant="text" color="primary">
+					Orders
+				</Button>
+			</NextLink></Box>
+			</Toolbar>
+		</AppBar>
+	);
+};

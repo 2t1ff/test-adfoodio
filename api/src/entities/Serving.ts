@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from "type-graphql";
+import { ObjectType, Field, Int, Float } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { ServingCategory } from "../types";
 
@@ -14,8 +14,8 @@ export class Serving extends BaseEntity {
 	@Column()
 	name!: string;
 
-	@Field()
-	@Column()
+	@Field(()=> Float)
+	@Column(() => Float32Array)
 	price!: number;
 
 	@Field()

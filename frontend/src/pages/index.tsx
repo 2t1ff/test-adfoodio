@@ -2,7 +2,7 @@ import React from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import { NavBar } from "../components/NavBar";
+import { HomeNavBar } from "../components/HomeNavBar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { Button, makeStyles } from "@material-ui/core";
@@ -11,11 +11,24 @@ import NextLink from "next/link";
 const useStyles = makeStyles((theme) => ({
 	image: {
 		backgroundImage:
-			"url(https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80)",
+			"url(/background.jpeg)",
 		backgroundRepeat: "no-repeat",
 		backgroundSize: "cover",
 		backgroundPosition: "center",
 	},
+	logo: {
+		backgroundImage:
+			"url(/logo.png)",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "contain",
+		backgroundPosition: "center",
+	},
+	button: {
+		border: "1px solid #7430FB"
+	},
+	span: {
+		color:"#7430FB" 
+	}
 }));
 
 const Index = () => {
@@ -23,9 +36,17 @@ const Index = () => {
 
 	return (
 		<>
-			<NavBar />
+			<HomeNavBar />
 			<Box display="flex" width="100%">
-				<Box className={classes.image} height="100vh" width="50%"></Box>
+				<Box display="flex" justifyContent="flex-end" flexDirection="column" className={classes.image} height="100vh" width="50%">
+					<Box
+						alignSelf="flex-start"
+						className={classes.logo}
+
+						width="60%"
+						height="20%"
+					/>
+				</Box>
 				<Box
 					display="flex"
 					flexDirection="column"
@@ -39,10 +60,9 @@ const Index = () => {
 						component="h1"
 						color="black"
 						fontSize={100}
-						
 						fontFamily="Lato"
 					>
-						HOMEMADE FOOD DELIVERY.
+						HOMEMADE <span className={classes.span}>FOOD </span>DELIVERY.
 					</Box>
 					<Box
 						ml={8}
@@ -53,11 +73,16 @@ const Index = () => {
 						fontWeight="300"
 						fontStyle="italic"
 					>
-						- Tastes as good as Grandma's!
+						- Tastes as <span className={classes.span}>good</span> as Grandma's!
 					</Box>
-					<Box alignSelf="center" >
-						<NextLink  href="/menu">
-							<Button size="large" variant="outlined" color="secondary" >
+					<Box alignSelf="center">
+						<NextLink href="/menu">
+							<Button
+								className={classes.button}
+								size="large"
+								variant="outlined"
+								color="secondary"
+							>
 								Order now
 							</Button>
 						</NextLink>
@@ -68,4 +93,4 @@ const Index = () => {
 	);
 };
 
-export default withUrqlClient(createUrqlClient, {ssr: true})(Index);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Index);

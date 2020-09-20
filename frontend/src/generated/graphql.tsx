@@ -16,6 +16,7 @@ export type Query = {
   __typename?: 'Query';
   getServings: Array<Serving>;
   me?: Maybe<User>;
+  getOrders: Array<Order>;
   getOffers: Array<Offer>;
 };
 
@@ -44,6 +45,7 @@ export type Order = {
   __typename?: 'Order';
   id: Scalars['Int'];
   userId: Scalars['String'];
+  totalPrice: Scalars['Float'];
   user: User;
   orderItems: Array<OrderItem>;
   state: Scalars['String'];
@@ -111,6 +113,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationCreateOrderArgs = {
+  totalPrice: Scalars['Float'];
   cartItems: Array<CartItem>;
 };
 
@@ -149,6 +152,7 @@ export type CartItem = {
 
 export type CreateOrderMutationVariables = Exact<{
   cartItems: Array<CartItem>;
+  totalPrice: Scalars['Float'];
 }>;
 
 
@@ -247,27 +251,24 @@ export type MyOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MyOrdersQuery = (
   { __typename?: 'Query' }
-  & { me?: Maybe<(
-    { __typename?: 'User' }
-    & { orders: Array<(
-      { __typename?: 'Order' }
-      & Pick<Order, 'state' | 'id' | 'createdAt'>
-      & { orderItems: Array<(
-        { __typename?: 'OrderItem' }
-        & Pick<OrderItem, 'quantity'>
-        & { serving: (
-          { __typename?: 'Serving' }
-          & Pick<Serving, 'name'>
-        ) }
-      )> }
+  & { getOrders: Array<(
+    { __typename?: 'Order' }
+    & Pick<Order, 'id' | 'totalPrice' | 'state'>
+    & { orderItems: Array<(
+      { __typename?: 'OrderItem' }
+      & Pick<OrderItem, 'quantity'>
+      & { serving: (
+        { __typename?: 'Serving' }
+        & Pick<Serving, 'name'>
+      ) }
     )> }
   )> }
 );
 
 
 export const CreateOrderDocument = gql`
-    mutation CreateOrder($cartItems: [CartItem!]!) {
-  createOrder(cartItems: $cartItems) {
+    mutation CreateOrder($cartItems: [CartItem!]!, $totalPrice: Float!) {
+  createOrder(cartItems: $cartItems, totalPrice: $totalPrice) {
     id
     userId
     orderItems {
@@ -371,17 +372,15 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
 };
 export const MyOrdersDocument = gql`
     query MyOrders {
-  me {
-    orders {
-      state
-      id
-      orderItems {
-        serving {
-          name
-        }
-        quantity
+  getOrders {
+    id
+    totalPrice
+    state
+    orderItems {
+      serving {
+        name
       }
-      createdAt
+      quantity
     }
   }
 }

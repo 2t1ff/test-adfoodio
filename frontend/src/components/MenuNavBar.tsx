@@ -47,12 +47,7 @@ export const MenuNavBar: React.FC<{}> = ({}) => {
         <Box ml="auto" mr={4}>
           <NextLink href="/menu">
             <Button variant="text" color="secondary">
-Menu
-            </Button>
-          </NextLink>
-          <NextLink href="/offers">
-            <Button variant="text" color="secondary">
-              Offers
+              Menu
             </Button>
           </NextLink>
           <NextLink href="/orders">

@@ -1,51 +1,51 @@
-import { Box, CircularProgress, Container, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  makeStyles,
+} from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { MenuNavBar } from "../components/MenuNavBar";
 import { useMyOrdersQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { useIsAuth } from "../utils/isAuth";
 
 const useStyles = makeStyles((theme) => ({
- kitchen: {
-
- },
- serving: {
- margin: 0,
+  kitchen: {},
+  serving: {
+    margin: 0,
     textDecoration: "underline",
     textDecorationColor: "#7430FB",
     fontWeight: "normal",
- },
- purple: {
-     color:"#7430FB"
- }
+  },
+  purple: {
+    color: "#7430FB",
+  },
 }));
-
 
 const Orders: React.FC<{}> = ({}) => {
   const router = useRouter();
   const classes = useStyles();
   const [{ data, fetching, error }] = useMyOrdersQuery();
-
-  let orders: typeof data.me.orders;
+  useIsAuth();
+  let orders: typeof data.getOrders;
   if (data) {
-    orders = data.me.orders.reverse();
+    orders = data.getOrders.reverse();
   }
 
-  const showStatus = (status: string)=> {
-      if (status === "kitchen") {
-         return <h2 className={classes.kitchen}>We're cooking it! 👨‍🍳</h2>
-      }
-      if (status === "ready") {
-         return <h2 className={classes.kitchen}>Ready for pick up! 🍲</h2>
-      }
-      if (status === "picked up") {
-         return <h2 className={classes.kitchen}>Enjoy the food! 🤰🏻</h2>
-      }
-
-  }
-
-
+  const showStatus = (status: string) => {
+    if (status === "kitchen") {
+      return <h2 className={classes.kitchen}>We're cooking it! 👨‍🍳</h2>;
+    }
+    if (status === "ready") {
+      return <h2 className={classes.kitchen}>Ready for pick up! 🍲</h2>;
+    }
+    if (status === "picked up") {
+      return <h2 className={classes.kitchen}>Enjoy the food! 🤰🏻</h2>;
+    }
+  };
 
   if (error) {
     return <div>Something went wrong, please try again.</div>;
@@ -68,20 +68,31 @@ const Orders: React.FC<{}> = ({}) => {
 
   return (
     <>
- <MenuNavBar />
+      <MenuNavBar />
       <Container maxWidth="md">
         {orders.map((order) => {
           return (
-            <Box key={order.id} padding={2} mb={4} borderRadius="5px" border="2px solid black">
+            <Box
+              key={order.id}
+              padding={2}
+              mb={4}
+              borderRadius="5px"
+              border="2px solid black"
+            >
               <Box display="flex" justifyContent="space-around">
-                <h1>Order <span className={classes.purple}>ID</span>: {order.id}</h1>
+                <h1>
+                  Order <span className={classes.purple}>ID</span>: {order.id}
+                </h1>
                 {showStatus(order.state)}
               </Box>
               {order.orderItems.map((item) => (
                 <h2 className={classes.serving}>
-                 - {item.serving.name} x {item.quantity}
+                  - {item.serving.name} x {item.quantity}
                 </h2>
               ))}
+              <Box display="flex" justifyContent="center">
+                <h2>{order.totalPrice.toFixed(2)}€</h2>
+              </Box>
             </Box>
           );
         })}

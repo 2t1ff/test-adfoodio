@@ -24,6 +24,11 @@ export class Order extends BaseEntity {
   @Column()
   userId!: string;
 
+ 
+  @Field()
+  @Column()
+  totalPrice!: number;
+
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.orders)
   user!: User;

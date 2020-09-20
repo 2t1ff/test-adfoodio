@@ -2,7 +2,7 @@ import { cacheExchange } from "@urql/exchange-graphcache";
 import  Router  from "next/router";
 import { dedupExchange, Exchange, fetchExchange } from "urql";
 import { pipe, tap } from "wonka";
-import { LoginMutation, MeDocument, MeQuery } from "../generated/graphql";
+import { CreateOrderMutation, LoginMutation, MeDocument, MeQuery, MyOrdersQuery } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { isServer } from "./isServer";
 
@@ -56,6 +56,9 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
 								}
 							);
 						},
+						createOrder: (_result, args, cache, info) => {
+							cache.invalidate("Query", "getOrders");
+						}
 					},
 				},
 			}),

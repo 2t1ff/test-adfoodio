@@ -1,15 +1,13 @@
 query MyOrders{
-    me {
-    orders {
-      state
-      id
-      orderItems{
-        serving{
-          name
-        }
-        quantity
+   getOrders{
+    id
+    totalPrice
+    state
+    orderItems{
+      serving{
+        name
       }
-      createdAt
+      quantity
     }
   }
 }

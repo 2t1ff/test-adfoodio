@@ -1,5 +1,5 @@
-mutation CreateOrder($cartItems:  [CartItem!]!){
-  createOrder(cartItems: $cartItems){
+mutation CreateOrder($cartItems:  [CartItem!]!, $totalPrice: Float!){
+  createOrder(cartItems: $cartItems, totalPrice: $totalPrice){
     id
     userId
     orderItems{

@@ -6,6 +6,7 @@ import {
   InputType,
   Int,
   Mutation,
+  Query,
   Resolver,
   Root,
 } from "type-graphql";
@@ -32,9 +33,10 @@ export class OrderResolver {
   @Mutation(() => Order)
   async createOrder(
     @Arg("cartItems", () => [CartItem]) cartItems: CartItem[],
+    @Arg("totalPrice") totalPrice: number,
     @Ctx() { req }: MyContext
   ) {
-    const order = await Order.create({ userId: req.session!.userId }).save();
+    const order = await Order.create({ userId: req.session!.userId, totalPrice }).save();
 
     const orderItems = await Promise.all(
       cartItems.map((item) => {
@@ -57,6 +59,13 @@ export class OrderResolver {
       }, 30000)
     );
     return order;
+  }
+
+  @Query(() => [Order])
+  getOrders(
+    @Ctx() {req} : MyContext
+  ){
+    return Order.find({userId: req.session?.userId})
   }
 
 }

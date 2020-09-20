@@ -25,6 +25,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 import { getCartIds } from "../utils/getCartIds";
 import { getCartLength } from "../utils/getCartLength";
 import { getTotal } from "../utils/getTotal";
+import { useIsAuth } from "../utils/isAuth";
 
 interface CartProps {}
 const useStyles = makeStyles((theme) => ({
@@ -65,6 +66,7 @@ const Cart: React.FC<CartProps> = ({}) => {
   const [_, createOrder] = useCreateOrderMutation();
   const [ids, setIds] = useState([]);
   const [offer, setOffer] = useState(null);
+  useIsAuth();
 
   if (fetching) {
     return (
@@ -184,7 +186,7 @@ const Cart: React.FC<CartProps> = ({}) => {
             variant="outlined"
             color="secondary"
             onClick={async () => {
-              const cartItems = servingsInCart.map((val) => {
+              const cartItemsData = servingsInCart.map((val) => {
                 return {
                   servingId: val.id,
                   quantity: parseInt(
@@ -192,7 +194,7 @@ const Cart: React.FC<CartProps> = ({}) => {
                   ),
                 };
               });
-              await createOrder({ cartItems });
+              await createOrder({ cartItems: cartItemsData, totalPrice: getTotal(cartItems, offer) });
               localStorage.clear();
               router.push("/orders");
             }}

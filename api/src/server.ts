@@ -11,6 +11,10 @@ import { ServingResolver } from "./resolvers/serving";
 import { Serving } from "./entities/Serving";
 import { User } from "./entities/User";
 import { UserResolver } from "./resolvers/user";
+import { SetupMigration1600549383814 } from "./migrations/SetUpMigration1600549383814";
+import { Order } from "./entities/Order";
+import { OrderItem } from "./entities/OrderItem";
+import { OrderResolver } from "./resolvers/order";
 
 const RedisStore = connectRedis(session);
 const redis = new Redis({ host: "redis" });
@@ -20,18 +24,19 @@ const port = process.env.NODE_PORT || 4848;
 //We didn't really need to export the main (renamed it from run) function since we're just executing it here.
 const main = async () => {
 	//TypeORM database Connection.
-	await createConnection({
+	const conn = await createConnection({
 		type: "mysql",
 		host: "mysql",
 		database: "adfoodio",
 		username: "root",
 		password: "root",
-		logging: true,
 		synchronize: true,
-		migrations: [],
-		entities: [Serving, User],
+		logging: false,
+		migrations: [SetupMigration1600549383814],
+		entities: [Serving, User, Order, OrderItem],
 	});
-
+	
+	await conn.runMigrations();
 	
 	const app = express();
 
@@ -69,17 +74,20 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [ServingResolver, UserResolver],
+			resolvers: [ServingResolver, UserResolver, OrderResolver],
 			validate: false,
+			
 		}),
 		context: ({ req, res }) => ({
 			req,
 			res,
 			redis,
 		}),
-	});
+		
+	},);
 
 	apolloServer.applyMiddleware({ app, cors: false });
+
 
 	return app.listen(port, function () {
 		// Port is forwarded by docker to 80.

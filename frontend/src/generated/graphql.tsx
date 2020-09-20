@@ -35,6 +35,30 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   createdAt: Scalars['String'];
+  orders: Array<Order>;
+  updatedAt: Scalars['String'];
+};
+
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['Int'];
+  userId: Scalars['String'];
+  user: User;
+  orderItems: Array<OrderItem>;
+  state: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  id: Scalars['Int'];
+  orderId: Scalars['Int'];
+  order: Order;
+  servingId: Scalars['Int'];
+  serving: Serving;
+  quantity: Scalars['Int'];
+  createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -45,6 +69,7 @@ export type Mutation = {
   registerUser: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  createOrder: Order;
 };
 
 
@@ -71,6 +96,11 @@ export type MutationLoginArgs = {
   usernameOrEmail: Scalars['String'];
 };
 
+
+export type MutationCreateOrderArgs = {
+  cartItems: Array<CartItem>;
+};
+
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
@@ -88,6 +118,32 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
 };
+
+export type CartItem = {
+  servingId: Scalars['Int'];
+  quantity: Scalars['Int'];
+};
+
+export type CreateOrderMutationVariables = Exact<{
+  cartItems: Array<CartItem>;
+}>;
+
+
+export type CreateOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrder: (
+    { __typename?: 'Order' }
+    & Pick<Order, 'id' | 'userId'>
+    & { orderItems: Array<(
+      { __typename?: 'OrderItem' }
+      & Pick<OrderItem, 'id' | 'servingId' | 'quantity'>
+      & { serving: (
+        { __typename?: 'Serving' }
+        & Pick<Serving, 'name' | 'price'>
+      ) }
+    )> }
+  ) }
+);
 
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
@@ -152,7 +208,50 @@ export type MeQuery = (
   )> }
 );
 
+export type MyOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type MyOrdersQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & { orders: Array<(
+      { __typename?: 'Order' }
+      & Pick<Order, 'state' | 'id' | 'createdAt'>
+      & { orderItems: Array<(
+        { __typename?: 'OrderItem' }
+        & Pick<OrderItem, 'quantity'>
+        & { serving: (
+          { __typename?: 'Serving' }
+          & Pick<Serving, 'name'>
+        ) }
+      )> }
+    )> }
+  )> }
+);
+
+
+export const CreateOrderDocument = gql`
+    mutation CreateOrder($cartItems: [CartItem!]!) {
+  createOrder(cartItems: $cartItems) {
+    id
+    userId
+    orderItems {
+      id
+      servingId
+      serving {
+        name
+        price
+      }
+      quantity
+    }
+  }
+}
+    `;
+
+export function useCreateOrderMutation() {
+  return Urql.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument);
+};
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {
@@ -218,4 +317,25 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const MyOrdersDocument = gql`
+    query MyOrders {
+  me {
+    orders {
+      state
+      id
+      orderItems {
+        serving {
+          name
+        }
+        quantity
+      }
+      createdAt
+    }
+  }
+}
+    `;
+
+export function useMyOrdersQuery(options: Omit<Urql.UseQueryArgs<MyOrdersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyOrdersQuery>({ query: MyOrdersDocument, ...options });
 };

@@ -5,8 +5,9 @@ import {
 	Column,
 	CreateDateColumn,
 	UpdateDateColumn,
-	BaseEntity,
+	BaseEntity, OneToMany
 } from "typeorm";
+import { Order } from "./Order";
 
 @ObjectType()
 @Entity()
@@ -29,6 +30,10 @@ export class User extends BaseEntity {
 	@Field(() => String)
 	@CreateDateColumn()
 	createdAt!: Date;
+
+	@Field(() => [Order])
+	@OneToMany(() => Order, order => order.user)
+	orders!: Order[]
 
 	@Field(() => String)
 	@UpdateDateColumn()

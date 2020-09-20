@@ -1,0 +1,15 @@
+mutation CreateOrder($cartItems:  [CartItem!]!){
+  createOrder(cartItems: $cartItems){
+    id
+    userId
+    orderItems{
+      id
+      servingId
+      serving {
+        name
+        price
+      }
+      quantity
+    }
+  }
+}

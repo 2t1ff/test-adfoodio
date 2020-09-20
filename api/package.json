@@ -6,7 +6,8 @@
 	"scripts": {
 		"start": "node -r ts-node/register ./src/server.ts",
 		"start:watch": "nodemon 'npm start'",
-		"test": "NODE_ENV=testing mocha -r ts-node/register 'src/**/*.spec.ts'"
+		"test": "NODE_ENV=testing mocha -r ts-node/register 'src/**/*.spec.ts'",
+		"typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
 	},
 	"author": "Jonathan Gill<jonathan@adludio.com>",
 	"license": "ISC",
@@ -18,10 +19,11 @@
 		"connect-redis": "^5.0.0",
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
+		"http": "0.0.1-security",
 		"mocha": "^8.1.1",
 		"mysql2": "^2.1.0",
-		"uuid": "^8.3.0",
-		"ts-node": "^9.0.0"
+		"ts-node": "^9.0.0",
+		"uuid": "^8.3.0"
 	},
 	"devDependencies": {
 		"@types/connect-redis": "^0.0.14",

@@ -1,0 +1,15 @@
+query MyOrders{
+    me {
+    orders {
+      state
+      id
+      orderItems{
+        serving{
+          name
+        }
+        quantity
+      }
+      createdAt
+    }
+  }
+}

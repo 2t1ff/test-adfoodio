@@ -16,6 +16,7 @@ export type Query = {
   __typename?: 'Query';
   getServings: Array<Serving>;
   me?: Maybe<User>;
+  getOffers: Array<Offer>;
 };
 
 export type Serving = {
@@ -62,6 +63,17 @@ export type OrderItem = {
   updatedAt: Scalars['String'];
 };
 
+export type Offer = {
+  __typename?: 'Offer';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  type: Scalars['String'];
+  value: Scalars['Int'];
+  requiredMeals: Scalars['Int'];
+  requiredDrinks: Scalars['Int'];
+  requiredDesserts: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createServing: Serving;
@@ -70,6 +82,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   createOrder: Order;
+  createOffer: Offer;
 };
 
 
@@ -99,6 +112,16 @@ export type MutationLoginArgs = {
 
 export type MutationCreateOrderArgs = {
   cartItems: Array<CartItem>;
+};
+
+
+export type MutationCreateOfferArgs = {
+  name: Scalars['String'];
+  requiredDesserts: Scalars['Int'];
+  requiredDrinks: Scalars['Int'];
+  requiredMeals: Scalars['Int'];
+  value: Scalars['Int'];
+  type: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -184,6 +207,17 @@ export type RegisterMutation = (
       & Pick<User, 'id' | 'username' | 'email'>
     )> }
   ) }
+);
+
+export type GetOffersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOffersQuery = (
+  { __typename?: 'Query' }
+  & { getOffers: Array<(
+    { __typename?: 'Offer' }
+    & Pick<Offer, 'name' | 'id' | 'type' | 'value' | 'requiredMeals' | 'requiredDrinks' | 'requiredDesserts'>
+  )> }
 );
 
 export type GetServingsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -289,6 +323,23 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const GetOffersDocument = gql`
+    query GetOffers {
+  getOffers {
+    name
+    id
+    type
+    value
+    requiredMeals
+    requiredDrinks
+    requiredDesserts
+  }
+}
+    `;
+
+export function useGetOffersQuery(options: Omit<Urql.UseQueryArgs<GetOffersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetOffersQuery>({ query: GetOffersDocument, ...options });
 };
 export const GetServingsDocument = gql`
     query GetServings {

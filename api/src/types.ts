@@ -3,6 +3,7 @@ import { Redis } from "ioredis";
 
 export type ServingCategory =  "food" | "drink" | "dessert";
 export type OrderState =  "kitchen" | "ready" | "picked up";
+export type OfferType = "discount" | "fixed price";
 export type MyContext = {
     req: Request,
     res: Response,

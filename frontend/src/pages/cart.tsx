@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import {
   AddShoppingCartOutlined,
+  Check,
   DeleteForeverOutlined,
   DeleteOutlined,
 } from "@material-ui/icons";
@@ -18,6 +19,7 @@ import { MenuNavBar } from "../components/MenuNavBar";
 import {
   useGetServingsQuery,
   useCreateOrderMutation,
+  useGetOffersQuery,
 } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { getCartIds } from "../utils/getCartIds";
@@ -58,9 +60,11 @@ const useStyles = makeStyles((theme) => ({
 const Cart: React.FC<CartProps> = ({}) => {
   const classes = useStyles();
   const router = useRouter();
+  const [{ data: offersData }] = useGetOffersQuery();
   const [{ data, fetching, error }] = useGetServingsQuery();
   const [_, createOrder] = useCreateOrderMutation();
   const [ids, setIds] = useState([]);
+  const [offer, setOffer] = useState(null);
 
   if (fetching) {
     return (
@@ -84,6 +88,18 @@ const Cart: React.FC<CartProps> = ({}) => {
     const servingsInCart = data.getServings.filter((serving) =>
       ids.includes(serving.id.toString())
     );
+    const cartItems = [];
+    data.getServings.forEach((serving) => {
+      if (ids.includes(serving.id.toString())) {
+        for (
+          let i = 0;
+          i < parseInt(localStorage.getItem("item" + serving.id));
+          i++
+        ) {
+          cartItems.push(serving);
+        }
+      }
+    });
 
     return (
       <>
@@ -129,6 +145,26 @@ const Cart: React.FC<CartProps> = ({}) => {
               </Box>
             );
           })}
+          {offersData ? (
+            <Box mt={2}>
+              {offersData.getOffers.map((offerData) => {
+                return (
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    border="2px solid orange"
+                  >
+                    <h2>{offerData.name}</h2>
+                    {offerData !== offer ? (
+                      <Button onClick={() => setOffer(offerData)}>Apply</Button>
+                    ) : (
+                      <Button onClick={() => setOffer(null)}> <Check /></Button>
+                    )}
+                  </Box>
+                );
+              })}
+            </Box>
+          ) : null}
           <Box
             display="flex"
             justifyContent="space-between"
@@ -137,7 +173,7 @@ const Cart: React.FC<CartProps> = ({}) => {
           >
             <h1 className={classes.total}>TOTAL:</h1>
             <h1 className={classes.totalPrice}>
-              {getTotal(servingsInCart).toFixed(2)}€
+              {getTotal(cartItems, offer).toFixed(2)}€
             </h1>
           </Box>
         </Container>
@@ -151,12 +187,14 @@ const Cart: React.FC<CartProps> = ({}) => {
               const cartItems = servingsInCart.map((val) => {
                 return {
                   servingId: val.id,
-                  quantity: parseInt(localStorage.getItem("item" + val.id.toString())),
+                  quantity: parseInt(
+                    localStorage.getItem("item" + val.id.toString())
+                  ),
                 };
               });
-               await createOrder({cartItems});
-               localStorage.clear();
-               router.push("/orders");
+              await createOrder({ cartItems });
+              localStorage.clear();
+              router.push("/orders");
             }}
           >
             Order now

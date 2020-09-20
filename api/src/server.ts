@@ -15,6 +15,8 @@ import { SetupMigration1600549383814 } from "./migrations/SetUpMigration16005493
 import { Order } from "./entities/Order";
 import { OrderItem } from "./entities/OrderItem";
 import { OrderResolver } from "./resolvers/order";
+import { Offer } from "./entities/Offer";
+import { OfferResolver } from "./resolvers/offer";
 
 const RedisStore = connectRedis(session);
 const redis = new Redis({ host: "redis" });
@@ -31,11 +33,10 @@ const main = async () => {
 		username: "root",
 		password: "root",
 		synchronize: true,
-		logging: false,
+		logging: true,
 		migrations: [SetupMigration1600549383814],
-		entities: [Serving, User, Order, OrderItem],
+		entities: [Serving, User, Order, OrderItem, Offer],
 	});
-	
 	await conn.runMigrations();
 	
 	const app = express();
@@ -74,7 +75,7 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [ServingResolver, UserResolver, OrderResolver],
+			resolvers: [ServingResolver, UserResolver, OrderResolver, OfferResolver],
 			validate: false,
 			
 		}),

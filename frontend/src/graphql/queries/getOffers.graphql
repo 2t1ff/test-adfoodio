@@ -1,0 +1,11 @@
+query GetOffers{
+  getOffers{
+    name
+    id
+    type
+    value
+    requiredMeals
+    requiredDrinks
+    requiredDesserts
+  }
+}

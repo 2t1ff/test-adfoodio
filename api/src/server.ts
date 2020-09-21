@@ -11,7 +11,7 @@ import { ServingResolver } from "./resolvers/serving";
 import { Serving } from "./entities/Serving";
 import { User } from "./entities/User";
 import { UserResolver } from "./resolvers/user";
-import { SetupMigration1600549383814 } from "./migrations/SetUpMigration1600549383814";
+import { SetupMigration1600549383815 } from "./migrations/SetUpMigration1600549383815";
 import { Order } from "./entities/Order";
 import { OrderItem } from "./entities/OrderItem";
 import { OrderResolver } from "./resolvers/order";
@@ -23,8 +23,8 @@ const redis = new Redis({ host: "redis" });
 
 const port = process.env.NODE_PORT || 4848;
 
-//We didn't really need to export the main (renamed it from run) function since we're just executing it here.
-const main = async () => {
+
+export const main = async () => {
 	//TypeORM database Connection.
 	const conn = await createConnection({
 		type: "mysql",
@@ -34,7 +34,7 @@ const main = async () => {
 		password: "root",
 		synchronize: true,
 		logging: true,
-		migrations: [SetupMigration1600549383814],
+		migrations: [SetupMigration1600549383815],
 		entities: [Serving, User, Order, OrderItem, Offer],
 	});
 	await conn.runMigrations();

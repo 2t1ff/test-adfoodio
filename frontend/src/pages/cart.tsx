@@ -152,6 +152,7 @@ const Cart: React.FC<CartProps> = ({}) => {
               {offersData.getOffers.map((offerData) => {
                 return (
                   <Box
+                    key={offerData.id}
                     display="flex"
                     justifyContent="space-between"
                     border="2px solid orange"

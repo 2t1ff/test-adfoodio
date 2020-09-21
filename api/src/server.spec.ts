@@ -2,7 +2,7 @@
 import chai = require('chai')
 import chaiHttp = require('chai-http')
 
-import { run } from './server';
+import { main } from './server';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -10,8 +10,8 @@ const { expect } = chai;
 const testEndPoint = `http://localhost:4848`;
 describe('Integration tests', function() {
 
-  this.beforeAll(function () {
-    this.server =  run();
+  this.beforeAll(async function () {
+    this.server =  await main();
   });
 
   describe('Starting up', function() {
@@ -23,10 +23,9 @@ describe('Integration tests', function() {
   describe('endpoints', function() {
 
     it('supports main', async function() {
-      const res = await chai.request(testEndPoint).get('/').send();
+      const res = await chai.request(testEndPoint).get('/graphql').send();
       expect(res).to.have.status(200);
-      expect(res).to.be.text;
-      expect(res.text).to.equal('Food can be served');
+      
     });
   });
 
